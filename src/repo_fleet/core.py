@@ -76,18 +76,19 @@ def load_config(path: str | os.PathLike) -> Config:
 
 
 # ----------------------------------------------------------------------------- subprocess helpers
-def sh(cmd: list[str], cwd: str | None = None, timeout: int = 120) -> tuple[int, str]:
+def sh(cmd: list[str], cwd: str | None = None, timeout: int = 120, strip: bool = True) -> tuple[int, str]:
     try:
         p = subprocess.run(cmd, cwd=cwd, env=ENV, capture_output=True, text=True, timeout=timeout)
-        return p.returncode, (p.stdout + p.stderr).strip()
+        out = p.stdout + p.stderr
+        return p.returncode, out.strip() if strip else out
     except subprocess.TimeoutExpired:
         return 124, "timeout"
     except FileNotFoundError as e:
         return 127, str(e)
 
 
-def git(repo: str | os.PathLike, *args: str, timeout: int = 120) -> tuple[int, str]:
-    return sh(["git", "-C", str(repo), *args], timeout=timeout)
+def git(repo: str | os.PathLike, *args: str, timeout: int = 120, strip: bool = True) -> tuple[int, str]:
+    return sh(["git", "-C", str(repo), *args], timeout=timeout, strip=strip)
 
 
 # ----------------------------------------------------------------------------- discovery & state
