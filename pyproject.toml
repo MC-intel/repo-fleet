@@ -1,0 +1,18 @@
+[project]
+name = "repo-fleet"
+version = "0.1.0"
+description = "Keep a fleet of git repositories in sync and backed up: status, safe fast-forward pulls, verified bundles with multi-destination copies."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = []
+
+[project.scripts]
+repo-fleet = "repo_fleet.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

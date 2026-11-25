@@ -1,0 +1,29 @@
+# repo-fleet configuration. Copy to ~/.config/repo-fleet/config.toml
+state_dir = "~/.local/state/repo-fleet"
+
+# Each [[root]] is a directory whose direct children are git repositories.
+[[root]]
+class = "work"
+path  = "~/src/work"
+
+[[root]]
+class = "oss"
+path  = "~/src/oss"
+
+[[root]]
+class = "vendor"
+path  = "~/src/vendor"
+pull_only = true          # push URL is disabled on every run: this code must never be published
+
+[backup]
+dir = "~/backups/repo-fleet"
+min_copies = 2            # primary dir counts as one; the run fails if fewer copies land
+private = ["dotfiles"]    # repo names that never go to shared destinations
+
+[[backup.destination]]
+target = "/mnt/nas/repo-fleet"
+require_mount = "/mnt/nas"        # skipped, not failed, while the disk is unmounted
+skip_classes = ["private"]
+
+[[backup.destination]]
+target = "backup-host:backups/repo-fleet"   # rsync over ssh (key auth only)
