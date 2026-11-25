@@ -28,6 +28,7 @@ class Root:
     cls: str
     path: Path
     pull_only: bool = False
+    local_only: bool = False      # repos here intentionally have no remote (not flagged by status)
 
 
 @dataclass
@@ -58,7 +59,7 @@ def _expand(p: str) -> Path:
 
 def load_config(path: str | os.PathLike) -> Config:
     raw = tomllib.loads(Path(path).read_text())
-    roots = [Root(r["class"], _expand(r["path"]), bool(r.get("pull_only", False))) for r in raw.get("root", [])]
+    roots = [Root(r["class"], _expand(r["path"]), bool(r.get("pull_only", False)), bool(r.get("local_only", False))) for r in raw.get("root", [])]
     if not roots:
         raise ValueError("config needs at least one [[root]] table")
     b = raw.get("backup", {})
@@ -96,6 +97,7 @@ class Repo:
     name: str
     path: str
     pull_only: bool = False
+    local_only: bool = False
 
 
 def discover(cfg: Config) -> list[Repo]:
@@ -110,7 +112,7 @@ def discover(cfg: Config) -> list[Repo]:
             if real in seen or not (Path(real) / ".git").exists():
                 continue
             seen.add(real)
-            out.append(Repo(root.cls, child.name, real, root.pull_only))
+            out.append(Repo(root.cls, child.name, real, root.pull_only, root.local_only))
     return out
 
 
@@ -151,7 +153,7 @@ def attention_flags(repo: Repo, i: dict) -> list[str]:
         flags.append(f"ahead {i['ahead']}")
     if i["behind"]:
         flags.append(f"behind {i['behind']}")
-    if not has_remote(repo.path):
+    if not repo.local_only and not has_remote(repo.path):
         flags.append("no-remote")
     return flags
 

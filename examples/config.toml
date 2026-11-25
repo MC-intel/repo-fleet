@@ -15,6 +15,11 @@ class = "vendor"
 path  = "~/src/vendor"
 pull_only = true          # push URL is disabled on every run: this code must never be published
 
+[[root]]
+class = "scratch"
+path  = "~/src/scratch"
+local_only = true         # intentionally no remote: not reported as "no-remote"
+
 [backup]
 dir = "~/backups/repo-fleet"
 min_copies = 2            # primary dir counts as one; the run fails if fewer copies land

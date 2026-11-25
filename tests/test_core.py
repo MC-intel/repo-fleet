@@ -69,6 +69,14 @@ class TestDiscoverStatus(Base):
         self.assertIn("no-remote", self.out[0])
 
 
+    def test_local_only_root_not_flagged_for_missing_remote(self):
+        self.cfg.roots.append(core.Root("scratch", self.tmp / "scratch", local_only=True))
+        make_repo(self.tmp / "scratch" / "s")
+        core.cmd_status(self.cfg, out=self.say)
+        line = next(o for o in self.out if " s " in o)
+        self.assertNotIn("no-remote", line)
+
+
 class TestPull(Base):
     def setUp(self):
         super().setUp()

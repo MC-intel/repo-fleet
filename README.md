@@ -53,7 +53,7 @@ git clone ~/backups/repo-fleet/work/billing-service.bundle billing-service
 ## Development
 
 ```sh
-PYTHONPATH=src python3 -m unittest discover -s tests     # 15 tests, creates throwaway repos in a temp dir
+PYTHONPATH=src python3 -m unittest discover -s tests     # 16 tests, creates throwaway repos in a temp dir
 ```
 
 See [`examples/config.toml`](examples/config.toml) for every option.
