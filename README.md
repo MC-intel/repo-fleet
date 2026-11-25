@@ -20,6 +20,13 @@ updated   oss/parser +3
 bundles: 1 new, 3 unchanged, 0 failed; copies landed: 3/3
 ```
 
+## Where this came from
+
+I consolidated about 110 repositories (personal, an archive, work repos that must never be pushed elsewhere, and
+local-only tooling) into one backed-up system, and this is the tool that did it. The inventory found projects
+that had never been pushed, repos whose upstream was gone, and a backup drive that dropped off the bus and did not
+remount. Each of those shaped a rule below. The full story is in [docs/FIELD-NOTES.md](docs/FIELD-NOTES.md).
+
 ## Design decisions
 
 | Rule | Why | Test |
